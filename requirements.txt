@@ -1,3 +1,4 @@
 espnet
 torchaudio
 torch
+git+https://github.com/kan-bayashi/ParallelWaveGAN

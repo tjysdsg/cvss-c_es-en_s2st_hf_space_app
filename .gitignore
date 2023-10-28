@@ -1,3 +1,6 @@
+*.wav
+model
+vocoder
 data
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,jetbrains+all,visualstudiocode,python,jupyternotebooks

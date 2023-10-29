@@ -16,6 +16,7 @@ VOCODER_TAG = 'espnet/cvss-c_en_wavegan_hubert_vocoder'
 VOCODER_DIR = 'vocoder'
 
 NGPU = 0
+BEAM_SIZE = 1
 
 
 def download_model(tag: str, out_dir: str):
@@ -81,6 +82,7 @@ def s2st(
             'config.yml',
         ),
         ngpu=NGPU,
+        beam_size=BEAM_SIZE,
     )
 
     # Restore working directory

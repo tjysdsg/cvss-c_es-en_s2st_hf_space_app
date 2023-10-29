@@ -72,7 +72,7 @@ def s2st(
         ),
         vocoder_file=os.path.join(
             vocoder_path,
-            'checkpoint-400000steps.pkl',
+            'checkpoint-450000steps.pkl',
         ),
         vocoder_config=os.path.join(
             vocoder_path,

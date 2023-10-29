@@ -15,6 +15,8 @@ S2UT_DIR = 'model'
 VOCODER_TAG = 'espnet/cvss-c_en_wavegan_hubert_vocoder'
 VOCODER_DIR = 'vocoder'
 
+NGPU = 0
+
 
 def download_model(tag: str, out_dir: str):
     from huggingface_hub import snapshot_download
@@ -78,6 +80,7 @@ def s2st(
             vocoder_path,
             'config.yml',
         ),
+        ngpu=NGPU,
     )
 
     # Restore working directory

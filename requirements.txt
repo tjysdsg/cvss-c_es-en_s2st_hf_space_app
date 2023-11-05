@@ -1,4 +1,5 @@
-espnet
+gradio==4.1.1
+espnet==202310
 torchaudio
 torch
 git+https://github.com/kan-bayashi/ParallelWaveGAN

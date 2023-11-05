@@ -6,6 +6,8 @@ import soundfile as sf
 from s2st_inference import s2st_inference
 from utils import download_model
 
+DESCRIPTION = r"**Speech-to-Speech Translation from Spanish to English**"
+
 SAMPLE_RATE = 16000
 MAX_INPUT_LENGTH = 60  # seconds
 
@@ -29,20 +31,9 @@ class App:
 
     def s2st(
             self,
-            audio_source: str,
-            input_audio_mic: Optional[str],
-            input_audio_file: Optional[str],
+            input_audio: Optional[str],
     ):
-        if audio_source == 'file':
-            input_path = input_audio_file
-        else:
-            input_path = input_audio_mic
-
-        if input_path is None:
-            gr.Error(f"Input audio is too long. Truncated to {MAX_INPUT_LENGTH} seconds.")
-            return (None, None), None
-
-        orig_wav, orig_sr = torchaudio.load(input_path)
+        orig_wav, orig_sr = torchaudio.load(input_audio)
         wav = torchaudio.functional.resample(orig_wav, orig_freq=orig_sr, new_freq=SAMPLE_RATE)
         max_length = int(MAX_INPUT_LENGTH * SAMPLE_RATE)
         if wav.shape[1] > max_length:
@@ -94,71 +85,37 @@ class App:
             "PCM_16",
         )
 
-        return output_path, f'Source: {audio_source}'
-
-
-def update_audio_ui(audio_source: str) -> Tuple[dict, dict]:
-    mic = audio_source == "microphone"
-    return (
-        gr.update(visible=mic, value=None),  # input_audio_mic
-        gr.update(visible=not mic, value=None),  # input_audio_file
-    )
+        return output_path
 
 
 def main():
     app = App()
 
     with gr.Blocks() as demo:
+        gr.Markdown(DESCRIPTION)
         with gr.Group():
-            with gr.Row() as audio_box:
-                audio_source = gr.Radio(
-                    label="Audio source",
-                    choices=["file", "microphone"],
-                    value="file",
-                )
-                input_audio_mic = gr.Audio(
-                    label="Input speech",
-                    type="filepath",
-                    source="microphone",
-                    visible=False,
-                )
-                input_audio_file = gr.Audio(
-                    label="Input speech",
-                    type="filepath",
-                    source="upload",
-                    visible=True,
-                )
+            input_audio = gr.Audio(
+                label="Input speech",
+                type="filepath",
+                sources=["upload", "microphone"],
+                format='wav',
+                streaming=False,
+                visible=True,
+            )
 
             btn = gr.Button("Translate")
 
-            with gr.Column():
-                output_audio = gr.Audio(
-                    label="Translated speech",
-                    autoplay=False,
-                    streaming=False,
-                    type="numpy",
-                )
-                output_text = gr.Textbox(label="Translated text")
-
-        audio_source.change(
-            fn=update_audio_ui,
-            inputs=audio_source,
-            outputs=[
-                input_audio_mic,
-                input_audio_file,
-            ],
-            queue=False,
-            api_name=False,
-        )
+            output_audio = gr.Audio(
+                label="Translated speech",
+                autoplay=False,
+                streaming=False,
+                type="numpy",
+            )
 
         btn.click(
             fn=app.s2st,
-            inputs=[
-                audio_source,
-                input_audio_mic,
-                input_audio_file,
-            ],
-            outputs=[output_audio, output_text],
+            inputs=[input_audio],
+            outputs=[output_audio],
             api_name="run",
         )
 

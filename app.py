@@ -6,7 +6,18 @@ import soundfile as sf
 from s2st_inference import s2st_inference
 from utils import download_model
 
-DESCRIPTION = r"**Speech-to-Speech Translation from Spanish to English**"
+DESCRIPTION = r"""
+**Speech-to-Speech Translation from Spanish to English**
+
+- Paper: Direct Speech-to-Speech Translation With Discrete Units
+- Dataset: CVSS-C
+- Toolkit: [ESPnet](https://github.com/espnet/espnet)
+- Pretrained Speech-to-Unit translation model: https://huggingface.co/espnet/jiyang_tang_cvss-c_es-en_discrete_unit
+- Pretrained WaveGAN vocoder: https://huggingface.co/espnet/cvss-c_en_wavegan_hubert_vocoder
+
+Part of a CMU MIIS capstone project with [@realzza](https://github.com/realzza)
+and [@sophia1488](https://github.com/sophia1488)
+"""
 
 SAMPLE_RATE = 16000
 MAX_INPUT_LENGTH = 60  # seconds

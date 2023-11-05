@@ -112,6 +112,28 @@ def main():
                 type="numpy",
             )
 
+            # Placeholders so that the example section can show these values
+            source_text = gr.Text(label='Source Text', visible=False)
+            target_text = gr.Text(label='Target Text', visible=False)
+
+        # Examples
+        with gr.Row():
+            gr.Examples(
+                examples=[
+                    ["examples/example1.wav",
+                     "fue enterrada en el cementerio forest lawn memorial park de hollywood hills",
+                     "she was buried at the forest lawn memorial park of hollywood hills"],
+                    ["examples/example2.wav",
+                     "diversos otros músicos han interpretado esta canción en conciertos en vivo",
+                     "many other musicians have played this song in live concerts"],
+                    ["examples/example3.wav",
+                     "es gómez-moreno el primero en situar su origen en guadalajara, hoy ampliamente aceptado",
+                     "gomez moreno was the first person to place its origin in guadalajara which is now broadly accepted"],
+                ],
+                inputs=[input_audio, source_text, target_text],
+                outputs=[output_audio],
+            )
+
         btn.click(
             fn=app.s2st,
             inputs=[input_audio],
